@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "testmod",
+	"id": "shieldblockfix",
 	"version": "${version}",
-	"name": "Test Mod",
-	"description": "Debugging shields and what not",
+	"name": "Shield Block Fix",
+	"description": "Fixes Minecraft Bug - MC-238293, where a player's shield does not show correct states of shielding (blocking etc).",
 	"authors": [
 		"Walksy"
 	],
@@ -15,11 +15,11 @@
 	"environment": "client",
 	"entrypoints": {
 		"main": [
-      "walksy.test.TestMod"
+      "walksy.shield.ShieldBlockMod"
 		]
 	},
 	"mixins": [
-    "testmod.mixins.json"
+      "shieldblockfix.mixins.json"
 	],
 	"depends": {
 		"fabricloader": "*",

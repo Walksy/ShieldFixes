@@ -1,10 +1,9 @@
 {
 	"required": true,
-	"package": "walksy.test.mixin",
+	"package": "walksy.shield.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-    "ClientPlayerEntityMixin",
-    "KeyboardMixin"
+    "ClientPlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
