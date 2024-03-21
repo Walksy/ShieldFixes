@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "testmod",
+	"version": "${version}",
+	"name": "Test Mod",
+	"description": "Debugging shields and what not",
+	"authors": [
+		"Walksy"
+	],
+	"contact": {
+
+	},
+	"license": "MIT",
+	"icon": "assets/walksy/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+      "walksy.test.TestMod"
+		]
+	},
+	"mixins": [
+    "testmod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": "*",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
