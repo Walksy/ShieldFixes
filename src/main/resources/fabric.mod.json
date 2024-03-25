@@ -15,7 +15,7 @@
 	"environment": "client",
 	"entrypoints": {
 		"main": [
-      "walksy.shield.ShieldBlockMod"
+      "walksy.shield.main.ShieldBlockMod"
 		]
 	},
 	"mixins": [

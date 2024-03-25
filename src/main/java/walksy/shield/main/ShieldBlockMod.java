@@ -1,8 +1,7 @@
-package walksy.shield;
+package walksy.shield.main;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Items;
+import walksy.shield.manager.PlayerShieldingManager;
 
 public class ShieldBlockMod implements ModInitializer {
 
@@ -17,4 +16,5 @@ public class ShieldBlockMod implements ModInitializer {
     {
         return shieldingManager;
     }
+
 }
