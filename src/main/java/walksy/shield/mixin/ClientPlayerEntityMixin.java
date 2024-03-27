@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import walksy.shield.main.ShieldBlockMod;
+import walksy.shield.main.ShieldFixMod;
 
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
@@ -15,9 +15,6 @@ public class ClientPlayerEntityMixin {
         ordinal = 0), method = "tick()V")
     private void playerTick(CallbackInfo ci)
     {
-        ShieldBlockMod.getShieldingManager().tick();
+        ShieldFixMod.getShieldingManager().tick();
     }
-
-
-
 }

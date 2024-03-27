@@ -3,7 +3,10 @@
 	"package": "walksy.shield.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-    "ClientPlayerEntityMixin"
+    "ClientPlayerEntityMixin",
+    "BuiltinModelItemRendererMixin",
+    "LivingEntityMixin",
+    "ExplosionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
