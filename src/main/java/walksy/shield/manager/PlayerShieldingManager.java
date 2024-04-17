@@ -4,11 +4,18 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BannerBlockEntityRenderer;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.model.ShieldEntityModel;
+import net.minecraft.client.render.entity.model.TridentEntityModel;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -16,20 +23,24 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShieldItem;
+import net.minecraft.item.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.*;
 import org.joml.Math;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import walksy.shield.main.ShieldFixMod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +48,12 @@ import java.util.Objects;
 
 public class PlayerShieldingManager {
 
-    /**
-     * This concoction of code was made at 2am
-     */
-
     public ArrayList<ShieldingPlayer> shieldingPlayers = new ArrayList<>();
     public ArrayList<DisabledShieldPlayer> disabledShieldPlayers = new ArrayList<>();
 
     /**
      * This code uses the #usingShield(LivingEntity) method to collect an arraylist of players shielding
-     * However they're not actually shielding due to it not factoring in the 5 tick delay implemented by Minecraft
+     * However they're not actually shielding due to it not factoring in the 5 tick delay
      * So we factor this in ourselves (See #ShieldingPlayer)
      */
     public void tick() {
@@ -71,6 +78,8 @@ public class PlayerShieldingManager {
             }
         });
     }
+
+
 
     public void handleByteStatus(byte status, Object castedClass)
     {
@@ -126,6 +135,7 @@ public class PlayerShieldingManager {
                 double distance = Math.sqrt(nearEntity.squaredDistanceTo(pos));
                 if (distance < maxDistance) {
                     shieldingPlayers.forEach(shieldingPlayer -> {
+                        if (shieldingPlayer.getPlayer() != nearEntity) return;
                         Vec3d rotation = shieldingPlayer.getPlayer().getRotationVec(1);
                         Vec3d relativePosition = pos.relativize(shieldingPlayer.getPlayer().getPos()).normalize();
                         Vec3d flat = new Vec3d(relativePosition.x, 0.0, relativePosition.z);
@@ -149,8 +159,62 @@ public class PlayerShieldingManager {
         }
     }
 
+    public void setArmPose(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir) {
+        cir.cancel();
+        ItemStack itemStack = player.getStackInHand(hand);
+        if (itemStack.isEmpty()) {
+            cir.setReturnValue(BipedEntityModel.ArmPose.EMPTY);
+        } else {
+            if (itemStack.isOf(Items.SHIELD)) {
+                for (ShieldingPlayer shieldingPlayer : ShieldFixMod.getShieldingManager().shieldingPlayers) {
+                    if (shieldingPlayer.actuallyShielding()) {
+                        if (shieldingPlayer.getPlayer() == player) {
+                            cir.setReturnValue(BipedEntityModel.ArmPose.BLOCK);
+                            return;
+                        }
+                    } else {
+                        cir.setReturnValue(BipedEntityModel.ArmPose.ITEM);
+                        return;
+                    }
+                }
+            }
+            if (player.getActiveHand() == hand && player.getItemUseTimeLeft() > 0) {
+                UseAction useAction = itemStack.getUseAction();
+                if (useAction == UseAction.BOW) {
+                    cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
+                    return;
+                }
+                if (useAction == UseAction.SPEAR) {
+                    cir.setReturnValue(BipedEntityModel.ArmPose.THROW_SPEAR);
+                    return;
+                }
+                if (useAction == UseAction.CROSSBOW && hand == player.getActiveHand()) {
+                    cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_CHARGE);
+                    return;
+                }
+                if (useAction == UseAction.SPYGLASS) {
+                    cir.setReturnValue(BipedEntityModel.ArmPose.SPYGLASS);
+                    return;
+                }
+                if (useAction == UseAction.TOOT_HORN) {
+                    cir.setReturnValue(BipedEntityModel.ArmPose.TOOT_HORN);
+                    return;
+                }
+                if (useAction == UseAction.BRUSH) {
+                    cir.setReturnValue(BipedEntityModel.ArmPose.BRUSH);
+                    return;
+                }
+            } else if (!player.handSwinging && itemStack.isOf(Items.CROSSBOW) && CrossbowItem.isCharged(itemStack)) {
+                cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_HOLD);
+                return;
+            }
+            cir.setReturnValue(BipedEntityModel.ArmPose.ITEM);
+        }
+    }
+
     public void renderShield(ShieldEntityModel shieldModel, ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci)
     {
+        /*
         if (stack.isOf(Items.SHIELD)) {
             if (mode != ModelTransformationMode.GUI
                 && mode != ModelTransformationMode.FIRST_PERSON_LEFT_HAND
@@ -158,23 +222,23 @@ public class PlayerShieldingManager {
                 && mode != ModelTransformationMode.THIRD_PERSON_LEFT_HAND
                 && mode != ModelTransformationMode.THIRD_PERSON_RIGHT_HAND
             ) return;
-            LivingEntity livingEntityMixed = null;
+            LivingEntity shieldingEntity = null;
             for (Entity entity : MinecraftClient.getInstance().world.getEntities()) {
                 if (!(entity instanceof LivingEntity livingEntity))
                     continue;
                 if (livingEntity.getOffHandStack().equals(stack) || livingEntity.getMainHandStack().equals(stack)) {
-                    livingEntityMixed = livingEntity;
+                    shieldingEntity = livingEntity;
                     break;
                 }
             }
-            if (livingEntityMixed == null)
+            if (shieldingEntity == null)
                 return;
             ci.cancel();
             float red = 255, green = 255, blue = 255;
 
             for (DisabledShieldPlayer disabledShieldPlayer : disabledShieldPlayers)
             {
-                if (livingEntityMixed != disabledShieldPlayer.player) return;
+                if (shieldingEntity != disabledShieldPlayer.player) return;
                 red = 255;
                 green = 0;
                 blue = 0;
@@ -182,7 +246,7 @@ public class PlayerShieldingManager {
 
             for (ShieldingPlayer shieldingPlayer : shieldingPlayers)
             {
-                if (livingEntityMixed != shieldingPlayer.getPlayer()) return;
+                if (shieldingEntity != shieldingPlayer.getPlayer()) return;
                 if (shieldingPlayer.actuallyShielding()) {
                     red = 0;
                     green = 255;
@@ -210,7 +274,10 @@ public class PlayerShieldingManager {
             }
             matrices.pop();
         }
+
+         */
     }
+
 
     boolean isHoldingShield(LivingEntity entity)
     {
@@ -219,11 +286,11 @@ public class PlayerShieldingManager {
 
     /**
      * This boolean doesn't actually return the accurate state of a player shielding or not
-     * However the LivingEntity.isBlocking() method is also inaccurate due to the server not recording the player's itemUseTime correctly
-     * This also means other animations like throwing a trident or loading a crossbow will return inaccurate animations... buuuuut this mod is for shields only :3
+     * However the LivingEntity.isBlocking() method is also inaccurate due to the client not recording the player's itemUseTime correctly
      */
     boolean usingShield(LivingEntity entity)
     {
         return entity.isUsingItem() && isHoldingShield(entity);
     }
+
 }

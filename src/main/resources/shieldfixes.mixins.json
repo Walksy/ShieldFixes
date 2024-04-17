@@ -4,9 +4,11 @@
 	"compatibilityLevel": "JAVA_17",
 	"client": [
     "ClientPlayerEntityMixin",
-    "BuiltinModelItemRendererMixin",
+    "PlayerEntityRendererMixin",
     "LivingEntityMixin",
-    "ExplosionMixin"
+    "ExplosionMixin",
+    "ModelPredicateProviderRegistryMixin",
+    "BipedEntityModelMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
