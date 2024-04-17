@@ -32,6 +32,23 @@ public abstract class ModelPredicateProviderRegistryMixin {
         if (item == Items.SHIELD) {
             ci.cancel();
             overrideRegisterMethod(Items.SHIELD, new Identifier("blocking"), (stack, world, entity, seed) -> {
+                    if (entity != null) {
+                        if (entity == MinecraftClient.getInstance().player && entity.isUsingItem()) {
+                            return 1.0F;
+                        } else {
+                            for (ShieldingPlayer shieldingPlayer : ShieldFixMod.getShieldingManager().shieldingPlayers) {
+                                if (shieldingPlayer.getPlayer() == entity && shieldingPlayer.actuallyShielding()) {
+                                    return 1.0F;
+                                }
+                            }
+                        }
+                    } else {
+                        return 0.0F;
+                    }
+                    return 0.0F;
+                });
+
+                /*
                 if (entity == MinecraftClient.getInstance().player)
                 {
                     if (entity.isUsingItem())
@@ -47,7 +64,8 @@ public abstract class ModelPredicateProviderRegistryMixin {
                     }
                 }
                 return 0.0F;
-            });
+
+                 */
         }
     }
 

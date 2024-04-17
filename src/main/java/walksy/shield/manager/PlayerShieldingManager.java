@@ -59,7 +59,6 @@ public class PlayerShieldingManager {
     public void tick() {
         shieldingPlayers.removeIf(shieldingPlayer -> !usingShield(shieldingPlayer.getPlayer()));
         shieldingPlayers.forEach(ShieldingPlayer::tick);
-
         disabledShieldPlayers.removeIf(disabledShieldPlayer -> disabledShieldPlayer.disabledTime <= 0);
         disabledShieldPlayers.forEach(DisabledShieldPlayer::tick);
 
