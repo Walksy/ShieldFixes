@@ -1,6 +1,7 @@
 package walksy.shield.mixin;
 
 import com.google.common.collect.Maps;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.ClampedModelPredicateProvider;
 import net.minecraft.client.item.ModelPredicateProvider;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Mixin(ModelPredicateProviderRegistry.class)
 public abstract class ModelPredicateProviderRegistryMixin {
+
     @Shadow
     @Final
     private static Map<Item, Map<Identifier, ModelPredicateProvider>> ITEM_SPECIFIC;
@@ -30,6 +32,15 @@ public abstract class ModelPredicateProviderRegistryMixin {
         if (item == Items.SHIELD) {
             ci.cancel();
             overrideRegisterMethod(Items.SHIELD, new Identifier("blocking"), (stack, world, entity, seed) -> {
+                if (entity == MinecraftClient.getInstance().player)
+                {
+                    if (entity.isUsingItem())
+                    {
+                        return 1.0F;
+                    } else {
+                        return 0.0F;
+                    }
+                }
                 for (ShieldingPlayer shieldingPlayer : ShieldFixMod.getShieldingManager().shieldingPlayers) {
                     if (shieldingPlayer.actuallyShielding()) {
                         return 1.0F;

@@ -6,6 +6,7 @@ public class ShieldingPlayer
 {
     public int shieldingTicks, itemUseTimeLeft;
     private LivingEntity player;
+
     public ShieldingPlayer(LivingEntity player)
     {
         this.player = player;

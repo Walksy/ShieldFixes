@@ -180,6 +180,16 @@ public class PlayerShieldingManager {
             }
             if (player.getActiveHand() == hand && player.getItemUseTimeLeft() > 0) {
                 UseAction useAction = itemStack.getUseAction();
+
+                if (player == MinecraftClient.getInstance().player)
+                {
+                    if (useAction == UseAction.BLOCK)
+                    {
+                        cir.setReturnValue(BipedEntityModel.ArmPose.BLOCK);
+                        return;
+                    }
+                }
+
                 if (useAction == UseAction.BOW) {
                     cir.setReturnValue(BipedEntityModel.ArmPose.BOW_AND_ARROW);
                     return;
@@ -211,10 +221,9 @@ public class PlayerShieldingManager {
             cir.setReturnValue(BipedEntityModel.ArmPose.ITEM);
         }
     }
-
+/*
     public void renderShield(ShieldEntityModel shieldModel, ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci)
     {
-        /*
         if (stack.isOf(Items.SHIELD)) {
             if (mode != ModelTransformationMode.GUI
                 && mode != ModelTransformationMode.FIRST_PERSON_LEFT_HAND
@@ -275,10 +284,10 @@ public class PlayerShieldingManager {
             matrices.pop();
         }
 
-         */
+
     }
 
-
+*/
     boolean isHoldingShield(LivingEntity entity)
     {
         return entity.getMainHandStack().isOf(Items.SHIELD) || entity.getOffHandStack().isOf(Items.SHIELD);
