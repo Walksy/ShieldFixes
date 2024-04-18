@@ -18,4 +18,5 @@ This mod fixes the animation issue with shields where a player is shielding but 
 don't know if the player is shielding or not.
 
 This mod also factors in the 5-tick delay from shields. This means it will not show the player is blocking until they actually are blocking.
+
 ---
