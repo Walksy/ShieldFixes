@@ -18,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BipedEntityModel.class)
 public abstract class BipedEntityModelMixin<T extends LivingEntity> extends AnimalModel<T> implements ModelWithArms, ModelWithHead {
 
-    @Unique
-    private boolean leftArm = false;
+
 
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("HEAD"))
-    private void setAngles(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci) {
-        leftArm = livingEntity.getStackInHand(Hand.OFF_HAND).isOf(Items.SHIELD);
+    private void setAngles(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci)
+    {
     }
+
 
     @Inject(method = "positionRightArm", at = @At("HEAD"), cancellable = true)
     private void positionRightArm(T entity, CallbackInfo ci) {
-        if (leftArm)
+        if (entity.getStackInHand(Hand.OFF_HAND).isOf(Items.SHIELD))
         {
             ci.cancel();
         }
@@ -36,7 +36,7 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
 
     @Inject(method = "positionLeftArm", at = @At("HEAD"), cancellable = true)
     private void positionLeftArm(T entity, CallbackInfo ci) {
-        if (!leftArm)
+        if (!entity.getStackInHand(Hand.OFF_HAND).isOf(Items.SHIELD))
         {
             ci.cancel();
         }
