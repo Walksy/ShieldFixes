@@ -23,14 +23,18 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -79,24 +83,11 @@ public class PlayerShieldingManager {
     }
 
 
-
     public void handleByteStatus(byte status, Object castedClass)
     {
         LivingEntity entity = LivingEntity.class.cast(castedClass);
         switch (status)
         {
-            case 29 -> { //Shield Block
-                MinecraftClient.getInstance().world.playSound(
-                    entity.getX(),
-                    entity.getY(),
-                    entity.getZ(),
-                    SoundEvents.ITEM_SHIELD_BLOCK,
-                    SoundCategory.PLAYERS,
-                    1F,
-                    0.8F + MinecraftClient.getInstance().world.random.nextFloat() * 0.4F,
-                    false
-                );
-            }
             case 30 -> { //Disabled Shield
                 disabledShieldPlayers.add(new DisabledShieldPlayer(entity));
                 MinecraftClient.getInstance().world.playSound(
@@ -110,6 +101,38 @@ public class PlayerShieldingManager {
                     false
                 );
             }
+        }
+    }
+
+
+    public void onAttackEntity()
+    {
+        PlayerEntity player = MinecraftClient.getInstance().player;
+
+        if (player.disablesShield()) return;
+        ItemStack itemStack = player.getStackInHand(Hand.MAIN_HAND);
+        if (!itemStack.isItemEnabled(MinecraftClient.getInstance().world.getEnabledFeatures())) return;
+        if (MinecraftClient.getInstance().crosshairTarget instanceof EntityHitResult hitResult) {
+            shieldingPlayers.forEach(shieldingPlayer ->
+            {
+                if (shieldingPlayer.actuallyShielding() && hitResult.getEntity() == shieldingPlayer.getPlayer()) {
+                    Vec3d rotation = shieldingPlayer.getPlayer().getRotationVec(1);
+                    Vec3d relativePosition = player.getPos().relativize(shieldingPlayer.getPlayer().getPos()).normalize();
+                    Vec3d flat = new Vec3d(relativePosition.x, 0.0, relativePosition.z);
+                    if (flat.dotProduct(rotation) < 0.0) {
+                        MinecraftClient.getInstance().world.playSound(
+                            player.getX(),
+                            player.getY(),
+                            player.getZ(),
+                            SoundEvents.ITEM_SHIELD_BLOCK,
+                            SoundCategory.PLAYERS,
+                            1F,
+                            0.8F + MinecraftClient.getInstance().world.random.nextFloat() * 0.4F,
+                            false
+                        );
+                    }
+                }
+            });
         }
     }
 

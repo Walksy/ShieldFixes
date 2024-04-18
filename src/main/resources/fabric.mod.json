@@ -3,12 +3,14 @@
 	"id": "completedshieldfix",
 	"version": "${version}",
 	"name": "Walksy's Complete Shield Fixes",
-	"description": "Fixes Minecraft Bug - MC-238293 & MC-105068, where a player's shield does not show correct states of shielding (blocking etc) & shield sounds are not played correctly",
+	"description": "This mod resolves issues with shield sounds and corrects the animation glitch where the player's shield doesn't display blocking properly.",
 	"authors": [
 		"Walksy"
 	],
 	"contact": {
-
+    "issues": "https://github.com/Walksy/ShieldFixes/issues",
+    "sources": "https://github.com/Walksy/ShieldFixes",
+    "homepage": "https://discord.com/invite/zeu7uNuBWY"
 	},
 	"license": "MIT",
 	"icon": "assets/walksy/icon.png",

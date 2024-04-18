@@ -8,7 +8,8 @@
     "LivingEntityMixin",
     "ExplosionMixin",
     "ModelPredicateProviderRegistryMixin",
-    "BipedEntityModelMixin"
+    "BipedEntityModelMixin",
+    "MinecraftClientMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
