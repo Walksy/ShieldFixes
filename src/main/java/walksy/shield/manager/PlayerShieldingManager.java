@@ -246,6 +246,11 @@ public class PlayerShieldingManager {
         return entity.getMainHandStack().isOf(Items.SHIELD) || entity.getOffHandStack().isOf(Items.SHIELD);
     }
 
+    public boolean isHoldingAnimationItem(LivingEntity entity)
+    {
+        return entity.getMainHandStack().isOf(Items.CROSSBOW) || entity.getOffHandStack().isOf(Items.CROSSBOW);
+    }
+
     /**
      * This boolean doesn't actually return the accurate state of a player shielding or not
      * However the LivingEntity.isBlocking() method is also inaccurate due to the client not recording the player's itemUseTime correctly

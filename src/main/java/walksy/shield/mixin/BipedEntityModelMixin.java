@@ -142,7 +142,7 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
         boolean bl4;
         if (livingEntity.isUsingItem()) {
             bl4 = livingEntity.getActiveHand() == Hand.MAIN_HAND;
-            if (ShieldFixMod.getShieldingManager().isHoldingShield(livingEntity))
+            if (ShieldFixMod.getShieldingManager().isHoldingShield(livingEntity) && !ShieldFixMod.getShieldingManager().isHoldingAnimationItem(livingEntity))
             {
                 this.positionRightArm(livingEntity);
                 this.positionLeftArm(livingEntity);
