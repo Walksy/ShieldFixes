@@ -12,10 +12,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BannerBlockEntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
-import net.minecraft.client.render.entity.model.ShieldEntityModel;
-import net.minecraft.client.render.entity.model.TridentEntityModel;
+import net.minecraft.client.render.entity.model.*;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -31,6 +28,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Arm;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
@@ -46,9 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import walksy.shield.main.ShieldFixMod;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class PlayerShieldingManager {
 
@@ -243,74 +239,9 @@ public class PlayerShieldingManager {
             cir.setReturnValue(BipedEntityModel.ArmPose.ITEM);
         }
     }
-/*
-    public void renderShield(ShieldEntityModel shieldModel, ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci)
-    {
-        if (stack.isOf(Items.SHIELD)) {
-            if (mode != ModelTransformationMode.GUI
-                && mode != ModelTransformationMode.FIRST_PERSON_LEFT_HAND
-                && mode != ModelTransformationMode.FIRST_PERSON_RIGHT_HAND
-                && mode != ModelTransformationMode.THIRD_PERSON_LEFT_HAND
-                && mode != ModelTransformationMode.THIRD_PERSON_RIGHT_HAND
-            ) return;
-            LivingEntity shieldingEntity = null;
-            for (Entity entity : MinecraftClient.getInstance().world.getEntities()) {
-                if (!(entity instanceof LivingEntity livingEntity))
-                    continue;
-                if (livingEntity.getOffHandStack().equals(stack) || livingEntity.getMainHandStack().equals(stack)) {
-                    shieldingEntity = livingEntity;
-                    break;
-                }
-            }
-            if (shieldingEntity == null)
-                return;
-            ci.cancel();
-            float red = 255, green = 255, blue = 255;
-
-            for (DisabledShieldPlayer disabledShieldPlayer : disabledShieldPlayers)
-            {
-                if (shieldingEntity != disabledShieldPlayer.player) return;
-                red = 255;
-                green = 0;
-                blue = 0;
-            }
-
-            for (ShieldingPlayer shieldingPlayer : shieldingPlayers)
-            {
-                if (shieldingEntity != shieldingPlayer.getPlayer()) return;
-                if (shieldingPlayer.actuallyShielding()) {
-                    red = 0;
-                    green = 255;
-                    blue = 0;
-                } else {
-                    red = 255;
-                    green = 255;
-                    blue = 255;
-                }
-            }
-
-            boolean bl = BlockItem.getBlockEntityNbt(stack) != null;
-            matrices.push();
-            matrices.scale(1.0F, -1.0F, -1.0F);
-            SpriteIdentifier spriteIdentifier = bl ? ModelLoader.SHIELD_BASE : ModelLoader.SHIELD_BASE_NO_PATTERN;
-            VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(
-                ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, shieldModel.getLayer(spriteIdentifier.getAtlasId()), true, stack.hasGlint())
-            );
-            shieldModel.getHandle().render(matrices, vertexConsumer, light, overlay, red / 255, green / 255, blue / 255, 1.0F);
-            if (bl) {
-                List<Pair<RegistryEntry<BannerPattern>, DyeColor>> list = BannerBlockEntity.getPatternsFromNbt(ShieldItem.getColor(stack), BannerBlockEntity.getPatternListNbt(stack));
-                BannerBlockEntityRenderer.renderCanvas(matrices, vertexConsumers, light, overlay, shieldModel.getPlate(), spriteIdentifier, false, list, stack.hasGlint());
-            } else {
-                shieldModel.getPlate().render(matrices, vertexConsumer, light, overlay, red / 255, green / 255, blue / 255, 1.0F);
-            }
-            matrices.pop();
-        }
 
 
-    }
-
-*/
-    boolean isHoldingShield(LivingEntity entity)
+    public boolean isHoldingShield(LivingEntity entity)
     {
         return entity.getMainHandStack().isOf(Items.SHIELD) || entity.getOffHandStack().isOf(Items.SHIELD);
     }
