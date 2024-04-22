@@ -246,10 +246,13 @@ public class PlayerShieldingManager {
         return entity.getMainHandStack().isOf(Items.SHIELD) || entity.getOffHandStack().isOf(Items.SHIELD);
     }
 
-    public boolean isHoldingAnimationItem(LivingEntity entity)
+    public boolean isHoldingAnimationItemMainHand(LivingEntity entity)
     {
-        return entity.getMainHandStack().isOf(Items.CROSSBOW) || entity.getOffHandStack().isOf(Items.CROSSBOW);
+        return entity.getMainHandStack().isOf(Items.CROSSBOW)
+            || entity.getMainHandStack().isOf(Items.GOLDEN_APPLE)
+            || entity.getMainHandStack().isOf(Items.BOW);
     }
+
 
     /**
      * This boolean doesn't actually return the accurate state of a player shielding or not

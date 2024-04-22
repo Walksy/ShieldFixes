@@ -1,6 +1,7 @@
 package walksy.shield.manager;
 
 import net.minecraft.entity.LivingEntity;
+import walksy.shield.main.ShieldFixMod;
 
 public class ShieldingPlayer
 {
@@ -27,6 +28,6 @@ public class ShieldingPlayer
 
     public boolean actuallyShielding()
     {
-        return shieldingTicks >= 5;
+        return shieldingTicks >= 5 && !ShieldFixMod.getShieldingManager().isHoldingAnimationItemMainHand(this.player);
     }
 }

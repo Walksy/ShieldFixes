@@ -34,7 +34,9 @@ public abstract class ModelPredicateProviderRegistryMixin {
             overrideRegisterMethod(Items.SHIELD, new Identifier("blocking"), (stack, world, entity, seed) -> {
                     if (entity != null) {
                         if (entity == MinecraftClient.getInstance().player && entity.isUsingItem()) {
-                            return 1.0F;
+                            if (entity.getActiveItem() == stack) {
+                                return 1.0F;
+                            }
                         } else {
                             for (ShieldingPlayer shieldingPlayer : ShieldFixMod.getShieldingManager().shieldingPlayers) {
                                 if (shieldingPlayer.getPlayer() == entity && shieldingPlayer.actuallyShielding()) {
