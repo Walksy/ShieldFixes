@@ -3,13 +3,13 @@
 	"package": "walksy.shield.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-    "ClientPlayerEntityMixin",
-    "PlayerEntityRendererMixin",
     "LivingEntityMixin",
-    "ExplosionMixin",
+    "ClientPlayerEntityMixin",
     "ModelPredicateProviderRegistryMixin",
+    "PlayerEntityRendererMixin",
     "BipedEntityModelMixin",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "ExplosionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
