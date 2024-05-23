@@ -1,8 +1,8 @@
-package walksy.shield.main;
+package walksy.dummymodule;
 
 import net.fabricmc.api.ModInitializer;
 
-public class ShieldFixMod implements ModInitializer {
+public class DummyMod implements ModInitializer {
 
     @Override
     public void onInitialize() {

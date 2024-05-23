@@ -1,27 +1,25 @@
 {
 	"schemaVersion": 1,
-	"id": "completedshieldfix",
+	"id": "dummymod",
 	"version": "${version}",
-	"name": "Walksy's Complete Shield Fixes",
-	"description": "This mod resolves issues with shield sounds and corrects the animation glitch where the player's shield doesn't display blocking properly.",
+	"name": "Dummy Mod",
+	"description": "",
 	"authors": [
 		"Walksy"
 	],
 	"contact": {
-    "issues": "https://github.com/Walksy/ShieldFixes/issues",
-    "sources": "https://github.com/Walksy/ShieldFixes",
-    "homepage": "https://discord.com/invite/zeu7uNuBWY"
+
 	},
 	"license": "MIT",
 	"icon": "assets/walksy/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"main": [
-      "walksy.shield.main.ShieldFixMod"
+      "walksy.dummymodule.DummyMod"
 		]
 	},
 	"mixins": [
-    "shieldfixes.mixins.json"
+      "dummymod.mixins.json"
 	],
 	"depends": {
 		"fabricloader": "*",
