@@ -24,6 +24,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -183,8 +184,8 @@ public class PlayerShieldingManager {
         if (itemStack.isEmpty()) {
             cir.setReturnValue(BipedEntityModel.ArmPose.EMPTY);
         } else {
-            if (itemStack.isOf(Items.SHIELD)) {
-                for (ShieldingPlayer shieldingPlayer : ShieldFixMod.getShieldingManager().shieldingPlayers) {
+            for (ShieldingPlayer shieldingPlayer : ShieldFixMod.getShieldingManager().shieldingPlayers) {
+                if (itemStack.isOf(Items.SHIELD)) {
                     if (shieldingPlayer.actuallyShielding()) {
                         if (shieldingPlayer.getPlayer() == player) {
                             cir.setReturnValue(BipedEntityModel.ArmPose.BLOCK);
@@ -232,7 +233,7 @@ public class PlayerShieldingManager {
                     cir.setReturnValue(BipedEntityModel.ArmPose.BRUSH);
                     return;
                 }
-            } else if (!player.handSwinging && itemStack.isOf(Items.CROSSBOW) && CrossbowItem.isCharged(itemStack)) {
+            } else if (!player.handSwinging && itemStack.isOf(Items.CROSSBOW) && CrossbowItem.isCharged(itemStack) && !player.isUsingItem()) {
                 cir.setReturnValue(BipedEntityModel.ArmPose.CROSSBOW_HOLD);
                 return;
             }
@@ -248,9 +249,8 @@ public class PlayerShieldingManager {
 
     public boolean isHoldingAnimationItemMainHand(LivingEntity entity)
     {
-        return entity.getMainHandStack().isOf(Items.CROSSBOW)
-            || entity.getMainHandStack().isOf(Items.GOLDEN_APPLE)
-            || entity.getMainHandStack().isOf(Items.BOW);
+        return entity.getMainHandStack().getMaxUseTime() != 0 //any time greater than 0 has some sort of animation
+            && !entity.getMainHandStack().isOf(Items.SHIELD); //leave out the shield
     }
 
 
@@ -260,7 +260,7 @@ public class PlayerShieldingManager {
      */
     boolean usingShield(LivingEntity entity)
     {
-        return entity.isUsingItem() && isHoldingShield(entity);
+        return entity.isUsingItem() && isHoldingShield(entity) && !isHoldingAnimationItemMainHand(entity);
     }
 
 }

@@ -28,6 +28,6 @@ public class ShieldingPlayer
 
     public boolean actuallyShielding()
     {
-        return shieldingTicks >= 5 && !ShieldFixMod.getShieldingManager().isHoldingAnimationItemMainHand(this.player);
+        return ConfigManager.INSTANCE.factor5TickDelay ? shieldingTicks >= 5 && !ShieldFixMod.getShieldingManager().isHoldingAnimationItemMainHand(this.player) : shieldingTicks >= 0 && !ShieldFixMod.getShieldingManager().isHoldingAnimationItemMainHand(this.player);
     }
 }

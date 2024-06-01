@@ -17,6 +17,6 @@ This mod adds shield sounds for the following events:
 This mod fixes the animation issue with shields where a player is shielding but sometimes doesn't show them blocking. This can be very annoying when PvPing as you
 don't know if the player is shielding or not.
 
-This mod also factors in the 5-tick delay from shields. This means it will not show the player is blocking until they actually are blocking.
+This mod also factors in the 5-tick delay from shields. This means it will not show the player is blocking until they actually are blocking. This can be disabled however, using /walksy5tickdelay if you find it annoying.
 
 ---
