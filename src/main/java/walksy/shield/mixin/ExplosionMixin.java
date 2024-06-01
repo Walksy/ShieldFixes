@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import walksy.shield.main.ShieldFixMod;
+import walksy.shield.manager.PlayerShieldingManager;
 
 @Mixin(Explosion.class)
 public class ExplosionMixin {
@@ -36,6 +37,6 @@ public class ExplosionMixin {
     @Inject(method = "affectWorld", at = @At("HEAD"))
     public void onExplosion(boolean particles, CallbackInfo ci)
     {
-        ShieldFixMod.getShieldingManager().onExplosion(this.x, this.y, this.z, this.power, this.world);
+        PlayerShieldingManager.INSTANCE.onExplosion(this.x, this.y, this.z, this.power, this.world);
     }
 }

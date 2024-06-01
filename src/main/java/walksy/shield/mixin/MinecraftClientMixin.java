@@ -5,14 +5,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import walksy.shield.main.ShieldFixMod;
+import walksy.shield.manager.PlayerShieldingManager;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
 
-    @Inject(method = "doAttack", at = @At("HEAD"))
-    public void attackEntity(CallbackInfoReturnable<Boolean> cir)
+    @Inject(method = "doAttack()Z", at = @At("HEAD"))
+    public void onAttack(CallbackInfoReturnable<Boolean> cir)
     {
-        ShieldFixMod.getShieldingManager().onAttackEntity();
+        PlayerShieldingManager.INSTANCE.onAttack();
     }
 }

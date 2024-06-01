@@ -8,16 +8,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import walksy.shield.main.ShieldFixMod;
+import walksy.shield.manager.PlayerShieldingManager;
 
 @Mixin(ClientPlayerEntity.class)
-public class ClientPlayerEntityMixin {
+public abstract class ClientPlayerEntityMixin {
 
-    @Inject(at = @At(value = "INVOKE",
-        target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V",
-        ordinal = 0), method = "tick()V")
-    private void playerTick(CallbackInfo ci)
+
+    @Inject(method = "tick()V", at = @At("HEAD"))
+    public void tick(CallbackInfo ci)
     {
-        ShieldFixMod.getShieldingManager().tick();
+        PlayerShieldingManager.INSTANCE.tick();
     }
 }

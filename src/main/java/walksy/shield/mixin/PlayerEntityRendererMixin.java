@@ -9,13 +9,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import walksy.shield.main.ShieldFixMod;
+import walksy.shield.manager.PlayerShieldingManager;
 
 @Mixin(PlayerEntityRenderer.class)
-public abstract class PlayerEntityRendererMixin {
+public class PlayerEntityRendererMixin {
 
     @Inject(method = "getArmPose", at = @At("HEAD"), cancellable = true)
     private static void setArmPose(AbstractClientPlayerEntity player, Hand hand, CallbackInfoReturnable<BipedEntityModel.ArmPose> cir)
     {
-        ShieldFixMod.getShieldingManager().setArmPose(player, hand, cir);
+        PlayerShieldingManager.INSTANCE.setArmPose(player, hand, cir);
     }
 }

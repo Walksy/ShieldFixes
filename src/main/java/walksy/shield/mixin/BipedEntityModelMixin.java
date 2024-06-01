@@ -3,7 +3,6 @@ package walksy.shield.mixin;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Items;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
@@ -14,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import walksy.shield.main.ShieldFixMod;
+import walksy.shield.manager.PlayerShieldingManager;
 
 @Mixin(BipedEntityModel.class)
 public abstract class BipedEntityModelMixin<T extends LivingEntity> extends AnimalModel<T> implements ModelWithArms, ModelWithHead {
-
 
     @Shadow
     @Final
@@ -142,15 +141,17 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
         boolean bl4;
         if (livingEntity.isUsingItem()) {
             bl4 = livingEntity.getActiveHand() == Hand.MAIN_HAND;
-            if (ShieldFixMod.getShieldingManager().isHoldingShield(livingEntity))
-            {
+            if (bl4 == bl3) {
                 this.positionRightArm(livingEntity);
-                this.positionLeftArm(livingEntity);
-            } else {
-                if (bl4 == bl3) {
-                    this.positionRightArm(livingEntity);
-                } else {
+                if (PlayerShieldingManager.INSTANCE.isHoldingUsableShield(livingEntity))
+                {
                     this.positionLeftArm(livingEntity);
+                }
+            } else {
+                this.positionLeftArm(livingEntity);
+                if (PlayerShieldingManager.INSTANCE.isHoldingUsableShield(livingEntity))
+                {
+                    this.positionRightArm(livingEntity);
                 }
             }
         } else {
@@ -240,4 +241,5 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
 
         this.hat.copyTransform(this.head);
     }
+
 }

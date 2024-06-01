@@ -1,25 +1,37 @@
 package walksy.shield.mixin;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import walksy.shield.main.ShieldFixMod;
+import walksy.shield.main.ILivingEntity;
+import walksy.shield.manager.PlayerShieldingManager;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public class LivingEntityMixin implements ILivingEntity {
+    
+    @Shadow
+    protected ItemStack activeItemStack;
+
+    @Shadow
+    protected int itemUseTimeLeft;
+
+    @Override
+    public void setActiveItem(ItemStack stack) {
+        this.activeItemStack = stack;
+    }
+
+    @Override
+    public void setItemUseTime(int time) {
+        this.itemUseTimeLeft = time;
+    }
 
     @Inject(method = "handleStatus", at = @At("HEAD"))
-    public void handleByteStatus(byte status, CallbackInfo ci)
+    public void onByteStatus(byte status, CallbackInfo ci)
     {
-        ShieldFixMod.getShieldingManager().handleByteStatus(status, this);
+        PlayerShieldingManager.INSTANCE.handleByteStatus(status, this);
     }
 }
