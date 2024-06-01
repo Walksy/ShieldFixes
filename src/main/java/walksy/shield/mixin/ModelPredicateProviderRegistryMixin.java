@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import walksy.shield.main.ShieldFixMod;
+import walksy.shield.manager.ConfigManager;
 
 import java.util.Map;
 
@@ -37,7 +38,12 @@ public class ModelPredicateProviderRegistryMixin {
                             return 1.0F;
                         }
                     } else {
-                        return entity.isUsingItem() && entity.getActiveItem() == stack && entity.isBlocking() ? 1.0F : 0.0F;
+                        if (ConfigManager.INSTANCE.factor5TickDelay)
+                        {
+                            return entity.isUsingItem() && entity.getActiveItem() == stack && entity.isBlocking() ? 1.0F : 0.0F;
+                        } else {
+                            return entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F;
+                        }
                     }
                 }
                 return 0.0F;
