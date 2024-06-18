@@ -80,7 +80,7 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
     private void setAngles(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci)
     {
         ci.cancel();
-        boolean bl = livingEntity.getRoll() > 4;
+        boolean bl = livingEntity.getFallFlyingTicks() > 4;
         boolean bl2 = livingEntity.isInSwimmingPose();
         this.head.yaw = i * 0.017453292F;
         if (bl) {
