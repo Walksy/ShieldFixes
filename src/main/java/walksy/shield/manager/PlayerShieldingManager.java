@@ -209,7 +209,7 @@ public class PlayerShieldingManager {
 
     private boolean isHoldingAnimationItemMainHand(LivingEntity entity)
     {
-        return entity.getMainHandStack().getMaxUseTime() != 0 //any time greater than 0 has some sort of animation
+        return entity.getMainHandStack().getMaxUseTime(entity) != 0 //any time greater than 0 has some sort of animation
             && !entity.getMainHandStack().isOf(Items.SHIELD); //leave out the shield
     }
 }

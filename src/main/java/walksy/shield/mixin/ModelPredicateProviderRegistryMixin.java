@@ -31,7 +31,7 @@ public class ModelPredicateProviderRegistryMixin {
     private static void registerShieldItem(Item item, Identifier id, ClampedModelPredicateProvider provider, CallbackInfo ci) {
         if (item == Items.SHIELD) {
             ci.cancel();
-            overrideRegisterMethod(Items.SHIELD, new Identifier("blocking"), (stack, world, entity, seed) -> {
+            overrideRegisterMethod(Items.SHIELD, Identifier.of("blocking"), (stack, world, entity, seed) -> {
                 if (entity != null) {
                     if (entity == MinecraftClient.getInstance().player && entity.isUsingItem()) {
                         if (entity.getActiveItem() == stack) {
