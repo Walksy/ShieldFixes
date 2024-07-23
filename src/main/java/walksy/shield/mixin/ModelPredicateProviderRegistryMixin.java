@@ -23,6 +23,7 @@ import java.util.Map;
 @Mixin(ModelPredicateProviderRegistry.class)
 public class ModelPredicateProviderRegistryMixin {
 
+
     @Shadow
     @Final
     private static Map<Item, Map<Identifier, ModelPredicateProvider>> ITEM_SPECIFIC;
@@ -31,7 +32,7 @@ public class ModelPredicateProviderRegistryMixin {
     private static void registerShieldItem(Item item, Identifier id, ClampedModelPredicateProvider provider, CallbackInfo ci) {
         if (item == Items.SHIELD) {
             ci.cancel();
-            overrideRegisterMethod(Items.SHIELD, new Identifier("blocking"), (stack, world, entity, seed) -> {
+            overrideRegisterMethod(Items.SHIELD, Identifier.ofVanilla("blocking"), (stack, world, entity, seed) -> {
                 if (entity != null) {
                     if (entity == MinecraftClient.getInstance().player && entity.isUsingItem()) {
                         if (entity.getActiveItem() == stack) {
