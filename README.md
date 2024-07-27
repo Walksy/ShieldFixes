@@ -1,22 +1,34 @@
-<h1>Complete Shield Fixes!</h1>
+<h1>Shield Statuses!</h1>
 
-This mod addresses two Minecraft bugs related to shields. It resolves issues with shield sounds (https://bugs.mojang.com/browse/MC-105068)
-and corrects the animation glitch where the player's shield doesn't display blocking properly (https://bugs.mojang.com/browse/MC-238293)
+This mod renders color overlays on player's shields to determine whether that shield is disabled or not.
 
 ---
 ### Information:
-**Shield Sounds**
+**Colors**
 
-This mod adds shield sounds for the following events:
+This mod will show two/three colors to represent the shield's status:
 
-- If a player's shield gets disabled.
-- If a player's shield is being hit / attacked by any damage source. This includes explosions and projectiles.
+- Red: Disabled.
+- Orange: Disabled, but almost re-enabled.
+- Green: Enabled.
+
+**Commands**
+
+- /shieldinterpolate
+
+This command gives you the option to set the shield to either display static red and green colors or to have the red color gradually transition to green. This way, you can estimate when the shield will be reactivated.
+
+
+**Compatibility & Improvements**
+
+With this version of shield statuses, it ensures to not mess with the actual minecraft textures of the shield itself, but instead renders the colors as an overlay in game to ensure the mod doesn't override custom shield textues from different resource packs.
+
+This version of shield statuses fixes a bug from the original mod, where the shield would incorrectly display as disabled (orange state) even after it had been re-enabled.
+
 ---
-**Shield Blocking**
+**Credits**
 
-This mod fixes the animation issue with shields where a player is shielding but sometimes doesn't show them blocking. This can be very annoying when PvPing as you
-don't know if the player is shielding or not.
+- Mod: Walksy, reiop / hinoob
+- Icon: SakuraFX
 
-This mod also factors in the 5-tick delay from shields. This means it will not show the player is blocking until they actually are blocking. This can be disabled however, using /walksy5tickdelay if you find it annoying.
 
----
