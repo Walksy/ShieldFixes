@@ -1,6 +1,6 @@
-package walksy.shield.main;
+package walksy.shieldfixes.interfaze;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface ILivingEntity {
     void setActiveItem(ItemStack stack);
