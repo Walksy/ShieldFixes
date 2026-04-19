@@ -21,7 +21,6 @@ public class IsUsingItemMixin {
     private static void registerShieldItem(ItemStack itemStack, ClientLevel level, LivingEntity owner, int seed, ItemDisplayContext displayContext, CallbackInfoReturnable<Boolean> cir) {
         if (!Config.modEnabled) return;
         if (owner == Minecraft.getInstance().player) return;
-        cir.cancel();
         if (owner instanceof Player player) {
             cir.setReturnValue(ShieldStateManager.isUsingShield(player, Config.factorDelay));
         }

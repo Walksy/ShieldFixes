@@ -31,9 +31,7 @@ public abstract class ServerExplosionMixin {
     @Inject(method = "hurtEntities", at = @At("HEAD"))
     public void onExplosion(CallbackInfo ci) {
         if (!Config.modEnabled) return;
-        EnvironmentEffectShieldManager.WorldExplosion explosion
-            = new EnvironmentEffectShieldManager.WorldExplosion(this.center(), this.level, this.radius);
-
+        EnvironmentEffectShieldManager.WorldExplosion explosion = new EnvironmentEffectShieldManager.WorldExplosion(this.center(), this.level, this.radius);
         ShieldFixes.getEnvironmentEffectShieldManager().onExplosion(explosion);
     }
 }
