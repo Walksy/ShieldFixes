@@ -35,7 +35,7 @@ public class AvatarRendererMixin {
         } else {
             if (player.getUsedItemHand() == hand && player.getUseItemRemainingTicks() > 0) {
                 ItemUseAnimation useAction = stack.getUseAnimation();
-                if (useAction == ItemUseAnimation.BLOCK && usingShield) {
+                if (useAction == ItemUseAnimation.BLOCK && (usingShield || !stack.is(Items.SHIELD))) {
                     cir.setReturnValue(HumanoidModel.ArmPose.BLOCK);
                     return;
                 }
