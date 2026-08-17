@@ -1,21 +1,13 @@
 package walksy.shieldfixes.config;
 
 import main.walksy.lib.api.WalksyLibConfig;
-import main.walksy.lib.core.config.impl.LocalConfig;
+import main.walksy.lib.core.config.impl.ModConfig;
 import main.walksy.lib.core.config.local.Category;
 import main.walksy.lib.core.config.local.Option;
 import main.walksy.lib.core.config.local.OptionDescription;
 import main.walksy.lib.core.config.local.options.BooleanOption;
-import main.walksy.lib.core.config.local.options.NumericalOption;
-import main.walksy.lib.core.config.local.options.PixelGridAnimationOption;
-import main.walksy.lib.core.config.local.options.StringListOption;
 import main.walksy.lib.core.config.local.options.groups.OptionGroup;
-import main.walksy.lib.core.config.local.options.type.PixelGrid;
-import main.walksy.lib.core.config.local.options.type.PixelGridAnimation;
 import main.walksy.lib.core.utils.PathUtils;
-import walksy.shieldfixes.ShieldFixes;
-
-import java.util.List;
 
 public class Config implements WalksyLibConfig {
 
@@ -45,8 +37,8 @@ public class Config implements WalksyLibConfig {
 
 
     @Override
-    public LocalConfig define() {
-        return LocalConfig.createBuilder("Shield Fixes")
+    public ModConfig define() {
+        return ModConfig.createBuilder()
             .path(PathUtils.ofConfigDir("shieldfixes"))
             .category(generalCategory)
             .build();
