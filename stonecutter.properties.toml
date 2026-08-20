@@ -1,0 +1,45 @@
+mod.id = "shieldfixes"
+mod.name = "Shield Fixes"
+mod.group = "walksy.shieldfixes"
+mod.version = "2.0.3"
+mod.description = "Resolves issues with shield sounds and corrects the animation glitch where the player's shield doesn't display blocking properly"
+
+deps.fabric_loader = "0.18.4"
+
+loomx.loom_version = "1.17-SNAPSHOT"
+
+["1.21.1"]
+mod.mc_compat = ">=1.21 <1.21.2"
+deps.walksylib = "0.9.96+1.21"
+
+["1.21.3"]
+mod.mc_compat = ">=1.21.2 <1.21.4"
+deps.walksylib = "0.9.96+1.21.2"
+
+["1.21.4"]
+mod.mc_compat = "1.21.4"
+deps.walksylib = "0.9.96+1.21.4"
+
+["1.21.5"]
+mod.mc_compat = "1.21.5"
+deps.walksylib = "0.9.96+1.21.5"
+
+["1.21.8"]
+mod.mc_compat = ">=1.21.6 <1.21.9"
+deps.walksylib = "0.9.96+1.21.6"
+
+["1.21.10"]
+mod.mc_compat = ">=1.21.9 <1.21.11"
+deps.walksylib = "0.9.96+1.21.9"
+
+["1.21.11"]
+mod.mc_compat = "1.21.11"
+deps.walksylib = "0.9.992+1.21.11"
+
+["26.1"]
+mod.mc_compat = "~26.1"
+deps.walksylib = "1.0.11+26.1"
+
+["26.2"]
+mod.mc_compat = "~26.2"
+deps.walksylib = "1.0.12+26.2"

@@ -1,16 +1,15 @@
 {
-	"required": true,
-	"package": "walksy.shieldfixes.mixin",
-	"compatibilityLevel": "JAVA_17",
-	"client": [
-    "LocalPlayerMixin",
-      "ServerExplosionMixin",
-    "IsUsingItemMixin",
-    "AvatarRendererMixin",
+  "required": true,
+  "package": "walksy.shieldfixes.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    ${versioned_mixins},
     "LivingEntityMixin",
-    "MinecraftMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+    "LocalPlayerMixin",
+    "MinecraftMixin",
+    "ServerExplosionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
