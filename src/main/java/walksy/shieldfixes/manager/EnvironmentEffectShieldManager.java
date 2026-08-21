@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import walksy.shieldfixes.ShieldFixes;
 import walksy.shieldfixes.config.Config;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class EnvironmentEffectShieldManager {
                 double distance = Math.sqrt(affectedPlayer.distanceToSqr(explosion.pos));
                 if (distance < explosion.getMaxDistance()) {
                     if (ShieldStateManager.isUsingShield(affectedPlayer, explosion.pos(), Config.factorDelay)) {
-                        this.sound(affectedPlayer, SoundEvents.SHIELD_BLOCK.value());
+                        this.sound(affectedPlayer, shieldBlock());
                     }
                 }
             }
@@ -34,13 +33,27 @@ public class EnvironmentEffectShieldManager {
     }
 
     public void onDisable(LivingEntity livingEntity) {
-        this.sound(livingEntity, SoundEvents.SHIELD_BREAK.value());
+        this.sound(livingEntity, shieldBreak());
     }
 
     public void onAttack(Player target) {
         if (ShieldStateManager.isUsingShield(target, this.minecraft.player.position(), true) && !ShieldStateManager.disablesShield(this.minecraft.player)) {
-            this.sound(target, SoundEvents.SHIELD_BLOCK.value());
+            this.sound(target, shieldBlock());
         }
+    }
+
+    private static SoundEvent shieldBlock() {
+        //? if >=1.21.5 {
+        return SoundEvents.SHIELD_BLOCK.value();
+        //?} else
+        //return SoundEvents.SHIELD_BLOCK;
+    }
+
+    private static SoundEvent shieldBreak() {
+        //? if >=1.21.5 {
+        return SoundEvents.SHIELD_BREAK.value();
+        //?} else
+        //return SoundEvents.SHIELD_BREAK;
     }
 
     private static List<Player> getNearPlayers(WorldExplosion explosion) {
@@ -50,7 +63,10 @@ public class EnvironmentEffectShieldManager {
     private void sound(LivingEntity entity, SoundEvent soundEvent) {
         if (this.minecraft.level == null) return;
         this.minecraft.level.playSound(
+            //? if >=1.21.5 {
             entity,
+            //?} else
+            //entity instanceof Player player ? player : null,
             entity.getX(),
             entity.getY(),
             entity.getZ(),

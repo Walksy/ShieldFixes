@@ -1,7 +1,11 @@
 package walksy.shieldfixes.config;
 
 import main.walksy.lib.api.WalksyLibConfig;
+//? if >=26.1 {
 import main.walksy.lib.core.config.impl.ModConfig;
+//?} else {
+/*import main.walksy.lib.core.config.impl.LocalConfig;
+*///?}
 import main.walksy.lib.core.config.local.Category;
 import main.walksy.lib.core.config.local.Option;
 import main.walksy.lib.core.config.local.OptionDescription;
@@ -37,8 +41,13 @@ public class Config implements WalksyLibConfig {
 
 
     @Override
+    //? if >=26.1 {
     public ModConfig define() {
         return ModConfig.createBuilder()
+    //?} else {
+    /*public LocalConfig define() {
+        return LocalConfig.createBuilder("Shield Fixes")
+    *///?}
             .path(PathUtils.ofConfigDir("shieldfixes"))
             .category(generalCategory)
             .build();

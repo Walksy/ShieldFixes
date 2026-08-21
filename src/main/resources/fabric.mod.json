@@ -1,36 +1,35 @@
 {
-	"schemaVersion": 1,
-	"id": "shieldfixes",
-	"version": "${version}",
-	"name": "Shield Fixes",
-	"description": "Resolves issues with shield sounds and corrects the animation glitch where the player's shield doesn't display blocking properly",
-	"authors": [
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
     "Walksy"
-	],
-	"contact": {
+  ],
+  "contact": {
     "issues": "https://github.com/Walksy/ShieldFixes/issues",
     "sources": "https://github.com/Walksy/ShieldFixes",
     "homepage": "https://discord.com/invite/zeu7uNuBWY"
-	},
-	"license": "MIT",
-	"icon": "assets/walksy/icon.png",
-	"environment": "client",
-	"entrypoints": {
-		"main": [
+  },
+  "license": "MIT",
+  "icon": "assets/walksy/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
       "walksy.shieldfixes.ShieldFixes"
-		],
+    ],
     "walksylib": [
       "walksy.shieldfixes.config.WalksyLibIntegration"
     ]
-	},
-	"mixins": [
-    "shieldfixes.mixins.json"
-	],
-	"depends": {
-		"fabricloader": "*",
-		"minecraft": "*",
-		"java": ">=17",
-		"fabric-api": "*",
+  },
+  "mixins": [
+    "${mod_id}.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "${minecraft_version_range}",
+    "java": ">=17",
     "walksylib": ">=0.9.95"
   }
 }

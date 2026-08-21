@@ -40,7 +40,10 @@ public class ShieldStateManager {
     public static boolean isUsingShield(Player player, Vec3 source, boolean delay) {
         boolean usingShield = delay
             ? player.isBlocking()
+            //? if >=1.21.11 {
             : (player.isUsingItem() && player.getActiveItem().is(Items.SHIELD));
+            //?} else
+            //: (player.isUsingItem() && player.getUseItem().is(Items.SHIELD));
 
         if (!usingShield) return false;
         if (source == null) return true;
