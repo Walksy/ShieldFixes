@@ -1,72 +1,51 @@
 package walksy.shieldfixes.manager;
 
+import main.walksy.lib.core.WalksyLib;
+import main.walksy.lib.core.mods.data.ShieldStateDataTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import walksy.shieldfixes.interfaze.ILivingEntity;
 
-import java.util.HashMap;
-import java.util.Map;
+public final class ShieldStateManager {
+    private static final int IDLE_USE_TIME = 72000;
 
-public class ShieldStateManager {
+    private ShieldStateManager() {
+    }
 
-    private final Minecraft minecraft = Minecraft.getInstance();
-    private final Map<Player, Integer> playerMap = new HashMap<>();
-
-    public void update() {
-        for (Player player : this.minecraft.level.players()) {
-            if (player != this.minecraft.player) {
-                int useTime = this.playerMap.getOrDefault(player, 72000); //create an integer map with each instance of a player
-
-                if (player.isUsingItem() && this.isHoldingUsableShield(player)) {
-                    ((ILivingEntity) player).setActiveItem(player.getItemInHand(player.getUsedItemHand()));
-                    ((ILivingEntity) player).setItemUseTime(useTime);
-                    useTime--;
-                } else {
-                    useTime = 72000;
-                }
-
-                this.playerMap.put(player, useTime);
+    public static void syncRemoteShieldUse() {
+        final Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null) {
+            return;
+        }
+        final ShieldStateDataTracker state = WalksyLib.getInstance().getShieldStateData();
+        for (final Player player : minecraft.level.players()) {
+            if (player == minecraft.player || !state.isUsingShield(player, false)) {
+                continue;
             }
+            ((ILivingEntity) player).setActiveItem(player.getItemInHand(player.getUsedItemHand()));
+            ((ILivingEntity) player).setItemUseTime(IDLE_USE_TIME - state.shieldUseTicks(player));
         }
     }
 
-    public static boolean isUsingShield(Player player, boolean delay) {
-        return isUsingShield(player, null, delay);
+    public static boolean isUsingShield(final Player player, final boolean delay) {
+        return WalksyLib.getInstance().getShieldStateData().isUsingShield(player, delay);
     }
 
-    public static boolean isUsingShield(Player player, Vec3 source, boolean delay) {
-        boolean usingShield = delay
-            ? player.isBlocking()
-            //? if >=1.21.11 {
-            : (player.isUsingItem() && player.getActiveItem().is(Items.SHIELD));
-            //?} else
-            //: (player.isUsingItem() && player.getUseItem().is(Items.SHIELD));
-
-        if (!usingShield) return false;
-        if (source == null) return true;
-
-        //LivingEntity#applyItemBlocking
-        Vec3 viewVector = player.getViewVector(1);
-        Vec3 vectorTo = source.vectorTo(player.position()).normalize();
-        Vec3 flat = new Vec3(vectorTo.x, 0.0, vectorTo.z);
+    public static boolean isUsingShield(final Player player, final Vec3 source, final boolean delay) {
+        if (!isUsingShield(player, delay)) {
+            return false;
+        }
+        if (source == null) {
+            return true;
+        }
+        final Vec3 viewVector = player.getViewVector(1);
+        final Vec3 vectorTo = source.vectorTo(player.position()).normalize();
+        final Vec3 flat = new Vec3(vectorTo.x, 0.0, vectorTo.z);
         return flat.dot(viewVector) < 0.0;
     }
 
-
-
-    private boolean isHoldingUsableShield(Player entity) {
-        return (entity.getMainHandItem().is(Items.SHIELD) || entity.getOffhandItem().is(Items.SHIELD)) && !isHoldingAnimationItemMainHand(entity);
-    }
-
-    private boolean isHoldingAnimationItemMainHand(Player entity) {
-        return entity.getMainHandItem().getUseDuration(entity) != 0
-            && !entity.getMainHandItem().is(Items.SHIELD);
-    }
-
-    public static boolean disablesShield(Player player) {
-        return player.getWeaponItem().getItem() instanceof AxeItem;
+    public static boolean disablesShield(final Player player) {
+        return WalksyLib.getInstance().getShieldStateData().disablesShield(player);
     }
 }

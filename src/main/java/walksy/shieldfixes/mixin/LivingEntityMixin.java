@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import walksy.shieldfixes.ShieldFixes;
-import walksy.shieldfixes.config.Config;
+import walksy.shieldfixes.config.ShieldFixesConfig;
 import walksy.shieldfixes.interfaze.ILivingEntity;
 
 @Mixin(LivingEntity.class)
@@ -32,7 +32,7 @@ public abstract class LivingEntityMixin implements ILivingEntity {
 
     @Inject(method = "handleEntityEvent", at = @At("HEAD"))
     public void onByteStatus(byte status, CallbackInfo ci) {
-        if (!Config.modEnabled) return;
+        if (!ShieldFixesConfig.modEnabled) return;
         if (status == 30) {
             ShieldFixes.getEnvironmentEffectShieldManager().onDisable(LivingEntity.class.cast(this));
         }

@@ -1,0 +1,2 @@
+SoundEvents\.SHIELD_(BLOCK|BREAK)\.value\(\) => SoundEvents.SHIELD_$1
+this\.minecraft\.level\.playSound\(entity, => this.minecraft.level.playSound(entity instanceof Player player ? player : null,

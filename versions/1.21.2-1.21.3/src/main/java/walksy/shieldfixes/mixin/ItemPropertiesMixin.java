@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import walksy.shieldfixes.config.Config;
+import walksy.shieldfixes.config.ShieldFixesConfig;
 import walksy.shieldfixes.manager.ShieldStateManager;
 
 import java.util.HashMap;
@@ -34,8 +34,8 @@ public class ItemPropertiesMixin {
         ci.cancel();
         shieldfixes$register(Items.SHIELD, ResourceLocation.withDefaultNamespace("blocking"), (stack, level, entity, seed) -> {
             if (entity == null) return 0.0F;
-            if (Config.modEnabled && entity != Minecraft.getInstance().player && entity instanceof Player target) {
-                return ShieldStateManager.isUsingShield(target, Config.factorDelay) ? 1.0F : 0.0F;
+            if (ShieldFixesConfig.modEnabled && entity != Minecraft.getInstance().player && entity instanceof Player target) {
+                return ShieldStateManager.isUsingShield(target, ShieldFixesConfig.factorDelay) ? 1.0F : 0.0F;
             }
             return entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
         });

@@ -1,0 +1,2 @@
+DataComponents\.SWING_ANIMATION => DataComponents.ATTACK_ANIMATION
+player\.swinging => player.isSwinging()

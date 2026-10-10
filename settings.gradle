@@ -1,0 +1,23 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'ShieldFixes'
+
+def requested = providers.gradleProperty('shieldfixes.versions').getOrElse('all').split(',')*.trim().findAll { it }
+def versionDirs = (file('versions').listFiles() ?: new File[0])
+		.findAll { it.directory && new File(it, 'gradle.properties').file }
+
+versionDirs.each { dir ->
+	if (requested.contains('all') || requested.contains(dir.name)) {
+		include(dir.name)
+		project(":${dir.name}").projectDir = dir
+	}
+}
